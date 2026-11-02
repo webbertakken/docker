@@ -1,0 +1,19 @@
+name: Retry sandbox
+on: workflow_dispatch
+jobs:
+  flaky:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail on the first attempt
+        run: |
+          echo "attempt ${{ github.run_attempt }}"
+          [ "${{ github.run_attempt }}" -ge 2 ]
+  steady:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo always passes
+  always-failing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail every attempt
+        run: exit 1
